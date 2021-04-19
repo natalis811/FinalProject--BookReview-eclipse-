@@ -43,6 +43,7 @@ public class AuthorizationPanel extends BasePanel {
 			public void componentShown(ComponentEvent e) {
 				if (application.getUser() != null) {
 					tfUsername.setText(application.getUser().getEmail());
+					pfPassword.setText("");
 				}
 			}
 		});
