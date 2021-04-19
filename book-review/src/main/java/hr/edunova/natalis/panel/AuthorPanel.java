@@ -39,67 +39,71 @@ public class AuthorPanel extends BasePanel {
 	private void initialize() {
 		setLayout(null);
 		setPreferredSize(new Dimension(800, 600));
-		
+
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-		        loadAuthors();
+				loadAuthors();
 			}
 		});
-		
+
 		add(createBackButton());
 		add(createHeader("Author"));
-		
+
 		// list
 		list = new JList<>();
 		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				authorSelected(e);
 			}
 		});
 		add(createScrollPane(list));
-		
+
 		// first name
 		JLabel lblFirstName = new JLabel("First name:");
 		lblFirstName.setBounds(385, 75, 82, 16);
 		add(lblFirstName);
-		
+
 		tfFirstName = new JTextField();
 		tfFirstName.setColumns(10);
 		tfFirstName.setBounds(535, 66, 244, 34);
 		add(tfFirstName);
-		
+
 		// last name
 		JLabel lblLastName = new JLabel("Last name:");
 		lblLastName.setBounds(385, 115, 82, 16);
 		add(lblLastName);
-		
+
 		tfLastName = new JTextField();
 		tfLastName.setColumns(10);
 		tfLastName.setBounds(535, 106, 244, 34);
 		add(tfLastName);
-		
+
 		// buttons
 		JButton btnAdd_Author = new JButton("Add");
 		btnAdd_Author.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-			        addAuthor();
+				addAuthor();
 			}
 		});
 		btnAdd_Author.setBounds(512, 152, 89, 29);
 		add(btnAdd_Author);
-		
+
 		JButton btnEdit_Author = new JButton("Edit");
 		btnEdit_Author.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateAuthor();
 			}
 		});
 		btnEdit_Author.setBounds(600, 152, 89, 29);
 		add(btnEdit_Author);
-		
+
 		JButton btnDelete_Author = new JButton("Delete");
 		btnDelete_Author.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				deleteAuthor();
 			}
@@ -116,7 +120,7 @@ public class AuthorPanel extends BasePanel {
 	}
 
 	private void authorSelected(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }               
+		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }
 		tfFirstName.setText(list.getSelectedValue().getFirstName());
 		tfLastName.setText(list.getSelectedValue().getLastName());
 	}
@@ -135,7 +139,7 @@ public class AuthorPanel extends BasePanel {
 			controller.create();
 			loadAuthors();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Adding author failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -149,7 +153,7 @@ public class AuthorPanel extends BasePanel {
 			controller.update();
 			loadAuthors();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Updating author failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -160,8 +164,11 @@ public class AuthorPanel extends BasePanel {
 			controller.setEntity(author);
 			controller.delete();
 			loadAuthors();
+		}catch (javax.persistence.PersistenceException exc) {
+			JOptionPane.showMessageDialog(application.getFrame(),
+					"Author cannot be deleted as used in book", "Warning", JOptionPane.WARNING_MESSAGE);
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Deleting author failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}

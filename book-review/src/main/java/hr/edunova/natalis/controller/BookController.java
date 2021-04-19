@@ -14,27 +14,27 @@ public class BookController extends AbstractController<Book> {
 	@Override
 	public List<Book> getData() {
 		List<Book> list = session.createQuery("from Book").list();
-        session.setCacheMode(CacheMode.IGNORE);
+		session.setCacheMode(CacheMode.IGNORE);
 		return list;
 	}
 
 	@Override
 	protected void controlCreate() throws BookException {
-		// TODO Auto-generated method stub
-		
+
+
 	}
 
 	@Override
 	protected void controlUpdate() throws BookException {
-		// TODO Auto-generated method stub
-		
+
+
 	}
 
 	@Override
 	protected void controlDelete() throws BookException {
-		// TODO Auto-generated method stub
-		
+
+
 	}
-	
+
 
 }

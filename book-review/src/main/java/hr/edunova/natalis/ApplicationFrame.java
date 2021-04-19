@@ -3,7 +3,9 @@ package hr.edunova.natalis;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.hibernate.Session;
 
@@ -22,17 +24,28 @@ import hr.edunova.natalis.util.InitData;
 
 public class ApplicationFrame {
 
+	private static JDialog preloader;
+
 	private User user;
-	
+
 	private JFrame frame;
-	
+
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run(){
+				preloader = new Preloader();
+				preloader.setVisible(true);
+			}});
+
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Session s = HibernateUtil.getSession();
 					if (s.getMetamodel().getEntities().size() > 0) {
 						ApplicationFrame window = new ApplicationFrame();
+						preloader.setVisible(false);
 						window.frame.setVisible(true);
 					}
 				} catch (Exception e) {
@@ -52,10 +65,11 @@ public class ApplicationFrame {
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 
 		// authorization panel
-		AuthorizationPanel authorizationPanel = new AuthorizationPanel(this); 
+		AuthorizationPanel authorizationPanel = new AuthorizationPanel(this);
 		frame.getContentPane().add(authorizationPanel, AuthorizationPanel.class.getSimpleName());
 
 		// panel registration
@@ -67,7 +81,7 @@ public class ApplicationFrame {
 		frame.getContentPane().add(welcomePanel, WelcomePanel.class.getSimpleName());
 
 		// category panel
-		CategoryPanel categoryPanel = new CategoryPanel(this); 
+		CategoryPanel categoryPanel = new CategoryPanel(this);
 		frame.getContentPane().add(categoryPanel, CategoryPanel.class.getSimpleName());
 
 		// publisher panel
@@ -94,13 +108,13 @@ public class ApplicationFrame {
 	public JFrame getFrame() {
 		return frame;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 }

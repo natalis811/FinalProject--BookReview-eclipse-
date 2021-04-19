@@ -20,8 +20,6 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import hr.edunova.natalis.ApplicationFrame;
 import hr.edunova.natalis.controller.UserController;
-import hr.edunova.natalis.model.Book;
-import hr.edunova.natalis.model.Category;
 import hr.edunova.natalis.model.User;
 
 public class UserPanel extends BasePanel {
