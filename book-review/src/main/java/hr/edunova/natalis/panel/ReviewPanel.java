@@ -188,10 +188,18 @@ public class ReviewPanel extends BasePanel {
 		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }
 		cbBook.setSelectedItem(list.getSelectedValue().getBook());
 		taReview.setText(list.getSelectedValue().getText());
+		dpDate.setDate(list.getSelectedValue().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		slRating.setValue(list.getSelectedValue().getRating());
+
+
 	}
 
 	private void clearReview() {
 		cbBook.setSelectedIndex(-1);
+		taReview.setText(" ");
+		dpDate.setDate(null);
+		slRating.setValue(1);
+
 	}
 
 	private void loadBooks() {

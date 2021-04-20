@@ -54,6 +54,7 @@ public class UserPanel extends BasePanel {
 		// list
 		list = new JList<>();
 		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				userSelected(e);
 			}
@@ -69,10 +70,11 @@ public class UserPanel extends BasePanel {
 		cbUser.setBounds(502, 110, 261, 26);
 		AutoCompleteDecorator.decorate(cbUser);
 		add(cbUser);
-		
+
 		//button
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				deleteUser();
 			}
@@ -83,21 +85,22 @@ public class UserPanel extends BasePanel {
 	}
 	private void loadUsercb() {
 		DefaultComboBoxModel<User> m = new DefaultComboBoxModel<>();
-        m.addElement(new User(-1L, "Choose", "user..."));
-        controller.getData().forEach(e -> {
-            m.addElement(e);
-        });
-        cbUser.setModel(m); 
-        cbUser.setSelectedIndex(0);
+		m.addElement(new User(-1L, "Choose", "user..."));
+		controller.getData().forEach(e -> {
+			m.addElement(e);
+		});
+		cbUser.setModel(m);
+		cbUser.setSelectedIndex(0);
 	}
 	private void userSelected(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }               
+		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }
 		cbUser.setSelectedItem(list.getSelectedValue());
 	}
 
 	private void clearUser() {
 		cbUser.setSelectedIndex(-1);
 	}
+
 	private void deleteUser() {
 		try {
 			User user = list.getSelectedValue();
@@ -105,10 +108,10 @@ public class UserPanel extends BasePanel {
 			controller.delete();
 			loadUsers();
 		} catch (Exception exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Deleting user failed", JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 	}
 
 	private void loadUsers() {
@@ -116,7 +119,7 @@ public class UserPanel extends BasePanel {
 		model.addAll(controller.getData());
 		list.setModel(model);
 		clearUser();
-		
+
 	}
 
 }

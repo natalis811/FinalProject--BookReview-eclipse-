@@ -25,7 +25,7 @@ public class PublisherPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 
 	private PublisherController controller;
-	
+
 	private JList<Publisher> list;
 	private JTextField tfName;
 	private JTextField tfAddress;
@@ -55,6 +55,7 @@ public class PublisherPanel extends BasePanel {
 		// list
 		list = new JList<>();
 		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				publisherSelected(e);
 			}
@@ -104,6 +105,7 @@ public class PublisherPanel extends BasePanel {
 		// buttons
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				addPublisher();
 			}
@@ -113,6 +115,7 @@ public class PublisherPanel extends BasePanel {
 
 		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				updatePublisher();
 			}
@@ -122,6 +125,7 @@ public class PublisherPanel extends BasePanel {
 
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				deletePublisher();
 			}
@@ -138,8 +142,11 @@ public class PublisherPanel extends BasePanel {
 	}
 
 	private void publisherSelected(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }               
+		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }
 		tfName.setText(list.getSelectedValue().getName());
+		tfAddress.setText(list.getSelectedValue().getAddress());
+		tfCity.setText(list.getSelectedValue().getCity());
+		tfCountry.setText(list.getSelectedValue().getCountry());
 	}
 
 	private void clearPublisher() {
@@ -160,7 +167,7 @@ public class PublisherPanel extends BasePanel {
 			controller.create();
 			loadPublishers();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Adding publisher failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -176,7 +183,7 @@ public class PublisherPanel extends BasePanel {
 			controller.update();
 			loadPublishers();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Updating publisher failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -188,10 +195,10 @@ public class PublisherPanel extends BasePanel {
 			controller.delete();
 			loadPublishers();
 		}catch (javax.persistence.PersistenceException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					"Publisher cannot be deleted as used in book", "Warning", JOptionPane.WARNING_MESSAGE);
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Deleting publisher failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
