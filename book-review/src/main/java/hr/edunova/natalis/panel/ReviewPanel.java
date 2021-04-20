@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -34,8 +36,6 @@ import hr.edunova.natalis.controller.ReviewController;
 import hr.edunova.natalis.exception.BookException;
 import hr.edunova.natalis.model.Book;
 import hr.edunova.natalis.model.Review;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
 public class ReviewPanel extends BasePanel {
 
@@ -77,6 +77,7 @@ public class ReviewPanel extends BasePanel {
 		// list
 		list = new JList<>();
 		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				reviewSelected(e);
 			}
@@ -116,6 +117,7 @@ public class ReviewPanel extends BasePanel {
 		slRating.setMinimum(1);
 		slRating.setMaximum(5);
 		slRating.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				lblRating.setText(String.valueOf(slRating.getValue()));
 			}
@@ -146,6 +148,7 @@ public class ReviewPanel extends BasePanel {
 		// buttons
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				addReview();
 			}
@@ -155,6 +158,7 @@ public class ReviewPanel extends BasePanel {
 
 		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				updateReview();
 			}
@@ -164,6 +168,7 @@ public class ReviewPanel extends BasePanel {
 
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				deleteReview();
 			}
@@ -180,7 +185,7 @@ public class ReviewPanel extends BasePanel {
 	}
 
 	private void reviewSelected(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }               
+		if (e.getValueIsAdjusting() || list.getSelectedValue() == null) { return; }
 		cbBook.setSelectedItem(list.getSelectedValue().getBook());
 		taReview.setText(list.getSelectedValue().getText());
 	}
@@ -195,20 +200,20 @@ public class ReviewPanel extends BasePanel {
 		bookController.getData().forEach(e -> {
 			m.addElement(e);
 		});
-		cbBook.setModel(m); 
+		cbBook.setModel(m);
 		cbBook.setSelectedIndex(0);
 	}
-	private void addReview() {	
+	private void addReview() {
 		try {
 			Review review = controller.findReview((Book) cbBook.getSelectedItem(), application.getUser());
 			if (review != null) {
-				JOptionPane.showMessageDialog(application.getFrame(), 
-						"Review by you for this book already exists", "Warning", JOptionPane.WARNING_MESSAGE);	
+				JOptionPane.showMessageDialog(application.getFrame(),
+						"Review by you for this book already exists", "Warning", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
 			review = new Review();
-			review.setText(taReview.getText());			
+			review.setText(taReview.getText());
 			review.setBook((Book) cbBook.getSelectedItem());
 			review.setRating(slRating.getValue());
 			review.setUser(application.getUser());
@@ -217,9 +222,9 @@ public class ReviewPanel extends BasePanel {
 			}
 			controller.setEntity(review);
 			controller.create();
-			loadBooks();
+			loadReviews();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Adding review failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -227,7 +232,7 @@ public class ReviewPanel extends BasePanel {
 	private void updateReview() {
 		try {
 			Review review = list.getSelectedValue();
-			review.setText(taReview.getText());			
+			review.setText(taReview.getText());
 			review.setBook((Book) cbBook.getSelectedItem());
 			review.setRating(slRating.getValue());
 			review.setUser(application.getUser());
@@ -235,7 +240,7 @@ public class ReviewPanel extends BasePanel {
 			controller.update();
 			loadBooks();
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Updating review failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -248,11 +253,11 @@ public class ReviewPanel extends BasePanel {
 				controller.delete();
 				loadBooks();
 			} else {
-				JOptionPane.showMessageDialog(application.getFrame(), 
+				JOptionPane.showMessageDialog(application.getFrame(),
 						"You're not allowed to delete review", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (BookException exc) {
-			JOptionPane.showMessageDialog(application.getFrame(), 
+			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Deleting review failed", JOptionPane.ERROR_MESSAGE);
 		}
 	}
