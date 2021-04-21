@@ -107,6 +107,9 @@ public class UserPanel extends BasePanel {
 			controller.setEntity(user);
 			controller.delete();
 			loadUsers();
+		}catch (javax.persistence.PersistenceException exc) {
+			JOptionPane.showMessageDialog(application.getFrame(),
+					"User cannot be deleted as used in review", "Warning", JOptionPane.WARNING_MESSAGE);
 		} catch (Exception exc) {
 			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Deleting user failed", JOptionPane.ERROR_MESSAGE);

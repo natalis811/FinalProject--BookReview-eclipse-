@@ -190,16 +190,13 @@ public class ReviewPanel extends BasePanel {
 		taReview.setText(list.getSelectedValue().getText());
 		dpDate.setDate(list.getSelectedValue().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		slRating.setValue(list.getSelectedValue().getRating());
-
-
 	}
 
 	private void clearReview() {
 		cbBook.setSelectedIndex(-1);
-		taReview.setText(" ");
+		taReview.setText("");
 		dpDate.setDate(null);
 		slRating.setValue(1);
-
 	}
 
 	private void loadBooks() {
@@ -246,7 +243,7 @@ public class ReviewPanel extends BasePanel {
 			review.setUser(application.getUser());
 			controller.setEntity(review);
 			controller.update();
-			loadBooks();
+			loadReviews();
 		} catch (BookException exc) {
 			JOptionPane.showMessageDialog(application.getFrame(),
 					exc.getMessage(), "Updating review failed", JOptionPane.ERROR_MESSAGE);
@@ -259,7 +256,7 @@ public class ReviewPanel extends BasePanel {
 			if (review.getUser().getId() == application.getUser().getId() || application.getUser().isAdmin()) {
 				controller.setEntity(review);
 				controller.delete();
-				loadBooks();
+				loadReviews();
 			} else {
 				JOptionPane.showMessageDialog(application.getFrame(),
 						"You're not allowed to delete review", "Warning", JOptionPane.WARNING_MESSAGE);
